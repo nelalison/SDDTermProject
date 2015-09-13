@@ -54,8 +54,8 @@ public class DataRepo extends SQLiteOpenHelper {
 		contentValues.put("lname", user.getLname());
 		contentValues.put("isstudent", user.isStudent() ? 1 : 0);
 		contentValues.put("isstaff", user.isFaculty() ? 1 : 0);
-		contentValues.put("language", user.getPhone());
-		contentValues.put("race", user.getEmail());
+		contentValues.put("phone", user.getPhone());
+		contentValues.put("email", user.getEmail());
 		contentValues.put("ismale", user.isMale() ? 1 : 0);
 
 		db.insert("users", null, contentValues);
