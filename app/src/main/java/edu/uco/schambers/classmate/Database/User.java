@@ -10,7 +10,7 @@ public class User implements Serializable {
 	public String fname;
 	public String lname;
 	public boolean Student;
-	public boolean Staff;
+	public boolean faculty;
 	public String phone;
 	public String email;
 	public boolean Male;
@@ -63,12 +63,12 @@ public class User implements Serializable {
 		this.Student = Student;
 	}
 
-	public boolean isStaff() {
-		return Staff;
+	public boolean isFaculty() {
+		return faculty;
 	}
 
 	public void setIsStaff(boolean Staff) {
-		this.Staff = Staff;
+		this.faculty = Staff;
 	}
 
 	public String getPhone() {

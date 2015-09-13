@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class DataRepo extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 4;
@@ -45,24 +42,42 @@ public class DataRepo extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	
+
 	public void createUser(User user) {
 		SQLiteDatabase db = this.getWritableDatabase();
-	      ContentValues contentValues = new ContentValues();
+		ContentValues contentValues = new ContentValues();
 
-	      contentValues.put("username", user.getUsername());
-	      contentValues.put("password", user.getPassword());
-	      contentValues.put("fname", user.getFname());
-	      contentValues.put("lname", user.getLname());
-	      contentValues.put("isstudent", user.isStudent() ? 1 : 0);
-	      contentValues.put("isstaff", user.isStaff() ? 1 : 0);
-	      contentValues.put("language", user.getPhone());
+		contentValues.put("id", user.getId());
+		contentValues.put("username", user.getUsername());
+		contentValues.put("password", user.getPassword());
+		contentValues.put("fname", user.getFname());
+		contentValues.put("lname", user.getLname());
+		contentValues.put("isstudent", user.isStudent() ? 1 : 0);
+		contentValues.put("isstaff", user.isFaculty() ? 1 : 0);
+		contentValues.put("language", user.getPhone());
 		contentValues.put("race", user.getEmail());
-	      contentValues.put("ismale", user.isMale() ? 1 : 0);
+		contentValues.put("ismale", user.isMale() ? 1 : 0);
 
-	      db.insert("users", null, contentValues);
+		db.insert("users", null, contentValues);
+		createRole(user);
 	}
-	
+
+	public void createRole(User user) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues contentValues = new ContentValues();
+
+		if(user.isStudent()) {
+			contentValues.put("id", user.getId());
+			contentValues.put("group", "StudentGroup");
+		}
+		else if(user.isFaculty()){
+			contentValues.put("id", user.getId());
+			contentValues.put("group", "FacultyGroup");
+		}
+
+		db.insert("dbRoles", null, contentValues);
+	}
+
 	public User getUser(String username) {
 		SQLiteDatabase db = this.getReadableDatabase();
 	      Cursor res =  db.rawQuery( "select * from users where username = '" + username + "'", null);
@@ -87,7 +102,7 @@ public class DataRepo extends SQLiteOpenHelper {
 	      
 	      return null;
 	}
-	
+
 	public boolean validateUser(String username, String password) {
 		SQLiteDatabase db = this.getReadableDatabase();
 	      Cursor res =  db.rawQuery( "select * from users where username = '" + username + "' and password = '" + password + "'", null);
